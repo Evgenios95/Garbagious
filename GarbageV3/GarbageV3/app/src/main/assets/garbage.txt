@@ -1,0 +1,52 @@
+plastic bottle, plastic
+bucket, plastic
+straw, plastic
+plastic cap, plastic
+plastic bottle cap, plastic
+plastic glove, plastic
+plastic dana, plastic
+plastic dustbin, plastic
+plastic ice cream cap, plastic
+plastic jelly cap, plastic
+can, metal
+cooking pan, metal
+window frame, metal
+telephone wire, metal
+lock, metal
+tv, metal
+monitor, metal
+pipe, metal
+penny, metal
+pennies, metal
+zinc, metal
+tin, metal
+egg shells, food
+tea, food
+coffee, food
+vegetables, food
+fruit, food
+fish bones, food
+newspaper, paper
+book, paper
+notebook, paper
+cardboard, paper
+card, paper
+package, paper
+carton, paper
+cheque, paper
+pizza box, paper
+post-it note, paper
+pressboard, paper
+box, paper
+napkin, paper
+banknote, paper
+letter, paper
+flypaper, paper
+envelope, paper
+magazine, paper
+window, glass
+mirror, glass
+pyrex, glass
+ceramics, glass
+glass bottle, glass
+glasses, glass

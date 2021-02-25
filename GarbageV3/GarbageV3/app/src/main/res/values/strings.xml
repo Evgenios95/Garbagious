@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Garbagious</string>
+    <string name="where">Where?</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="where_to_place_the_item">Where to place the item:</string>
+    <string name="type_here">Type here!</string>
+    <string name="add_a_new_item">Add a new item</string>
+    <string name="what_item">What item?</string>
+    <string name="add_new_item">add new item</string>
+    <string name="what_place">What place?</string>
+</resources>
