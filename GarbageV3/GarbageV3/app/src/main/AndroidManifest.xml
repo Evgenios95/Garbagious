@@ -15,7 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddItemActivity"
+<!--        <activity android:name=".AddItemActivity"-->
+<!--            android:screenOrientation="sensor">-->
+<!--        </activity>-->
+        <activity android:name=".ListActivity"
             android:screenOrientation="sensor">
         </activity>
     </application>

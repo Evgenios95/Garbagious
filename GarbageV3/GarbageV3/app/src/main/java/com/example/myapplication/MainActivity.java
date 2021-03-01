@@ -1,77 +1,75 @@
 package com.example.myapplication;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import android.content.res.Configuration;
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
     // Model: Database of items
-    private ItemsDB itemsDB;
-    private Button listItems, addNew;
-    private TextView items;
-    private EditText searchItems;
+    private FragmentManager fm;
+    Fragment fragmentUI, fragmentList;
 
+    //Items Database
+    private static ItemsDB itemsDB;
 
-    /**
-     *
-     * @return returns the garbage
-     */
-    public String findWaste() {
-        String items = searchItems.getText().toString().toLowerCase();
-        return itemsDB.findWaste(items);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.garb);
+        setContentView(R.layout.garbage);
+        itemsDB = ItemsDB.get(this);
+        fm = getSupportFragmentManager();
+        setUpFragments();
+    }
 
-        items= findViewById(R.id.items);
-        items.setText("Input garbage below: ");
-        listItems= findViewById(R.id.where_button);
-
-        itemsDB = ItemsDB.get(MainActivity.this);
-        searchItems= findViewById(R.id.searchItems);
-
-        listItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("EditText", searchItems.getText().toString());
-                items.setText(findWaste());
+    private void setUpFragments() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            fragmentUI = fm.findFragmentById(R.id.container_ui_landscape);
+            fragmentList = fm.findFragmentById(R.id.container_list);
+            if ((fragmentUI == null) && (fragmentList == null)) {
+                fragmentUI = new FragmentUI();
+                fragmentList = new ListFragment();
+                fm.beginTransaction()
+                        .add(R.id.container_ui_landscape, fragmentUI)
+                        .add(R.id.container_list, fragmentList)
+                        .commit();
             }
-        });
-
-        addNew = findViewById(R.id.addNew_button);
-
-        /**
-         * @setOnClickListener listItems is a button in this case. An instance
-         * of View.OnclickListener will be created and wired the listener to the
-         * button. After the user presses the button then something will happen
-         * which is onClick(View).
-         *
-         * startActivity(Intent) is used to start a new activity which will be placed on top of
-         * the activity stack. It takes an argument (Intent) and describes the activity which is
-         * going to be executed.
-         *
-         * @Intent(context,class) Creating an intent for a specific component.
-         * The context is a reference to link the resources to the program, you can simply write
-         * this or ShoppingActivity. this. And then the class that is to be run is provided. In
-         * our case Listactivity. Context is the starting point and class is the class activity
-         * we need to start. Writing intent will make the first page disappear and listactivity
-         * will take over the screen. Concurrency as well.
-         */
-        addNew.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
-                startActivity(intent);
+        } else {
+            //Orientation portrait
+            fragmentUI = fm.findFragmentById(R.id.container_ui_portrait);
+            if (fragmentUI == null) {
+                fragmentUI = new FragmentUI();
+                fm.beginTransaction()
+                        .add(R.id.container_ui_portrait, fragmentUI)
+                        .commit();
             }
-        });
+        }
     }
 }
+
+
+    //    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.fragment_ui);
+//
+//        items= findViewById(R.id.items);
+//        items.setText("Input garbage below: ");
+//        whereItems= findViewById(R.id.where_button);
+//
+//        itemsDB = ItemsDB.get(MainActivity.this);
+//        searchItems= findViewById(R.id.searchItems);
+//
+//        whereItems.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.v("EditText", searchItems.getText().toString());
+//                items.setText(findWaste());
+//            }
+//        });
+
+//
+
+
