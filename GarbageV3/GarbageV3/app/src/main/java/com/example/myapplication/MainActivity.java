@@ -48,28 +48,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-
-    //    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.fragment_ui);
-//
-//        items= findViewById(R.id.items);
-//        items.setText("Input garbage below: ");
-//        whereItems= findViewById(R.id.where_button);
-//
-//        itemsDB = ItemsDB.get(MainActivity.this);
-//        searchItems= findViewById(R.id.searchItems);
-//
-//        whereItems.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.v("EditText", searchItems.getText().toString());
-//                items.setText(findWaste());
-//            }
-//        });
-
-//
-
-

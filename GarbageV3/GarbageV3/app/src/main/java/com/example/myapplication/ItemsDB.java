@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
-public class ItemsDB {
+public class ItemsDB  {
 
     private static ItemsDB sItemsDB;
     private final HashMap<String, String> itemsMap = new HashMap<>();
@@ -26,16 +27,23 @@ public class ItemsDB {
         return sItemsDB;
     }
 
+    public void addItem(String what, String where) {
+        itemsMap.put(what, where);
+    }
+
     private ItemsDB() {
         fillItemsDB();
     }
 
-    public String listItems() {
-        String r = "";
-        for (HashMap.Entry<String, String> item : itemsMap.entrySet())
-            r = r + item.getKey().toLowerCase() + " is in:" + item.getValue().toLowerCase() +".\n";
-            return r;
+    public List<Item> getAll() {
+        List<Item> result = new ArrayList<>();
+        for (HashMap.Entry<String, String> item : itemsMap.entrySet()){
+            result.add(new Item(item.getKey(), item.getValue()));
     }
+        return result;
+    }
+
+    public int size() { return itemsMap.size(); }
 
     public String findWaste(String garbageItem){
         String r = "";
@@ -70,9 +78,6 @@ public class ItemsDB {
 
 
 
-//    public void addItem(String what, String where) {
-//        itemsMap.put(what, where);
-//    }
 
 
 

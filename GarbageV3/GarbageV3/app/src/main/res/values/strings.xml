@@ -8,4 +8,5 @@
     <string name="add_new_item">add new item</string>
     <string name="what_place">What place?</string>
     <string name="list_items">List items!</string>
+    <string name="show_listed_items">Show listed items!</string>
 </resources>
