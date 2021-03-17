@@ -3,6 +3,7 @@ package com.example.myapplication;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -61,8 +62,10 @@ public class FragmentUI extends Fragment {
             }
         });
 
-
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
         listItems = v.findViewById(R.id.list);
+
+
         listItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +73,7 @@ public class FragmentUI extends Fragment {
                 startActivity(intent);
             }
         });
-
+        }
 
         whatItem = v.findViewById(R.id.whatItem);
         whatPlace = v.findViewById(R.id.whatPlace);

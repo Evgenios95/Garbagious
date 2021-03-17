@@ -7,12 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
-public class ItemsDB  {
+public class ItemsDB extends Observable {
 
     private static ItemsDB sItemsDB;
     private final HashMap<String, String> itemsMap = new HashMap<>();
@@ -29,14 +28,15 @@ public class ItemsDB  {
 
     public void addItem(String what, String where) {
         itemsMap.put(what, where);
+        this.setChanged(); notifyObservers();
     }
 
     private ItemsDB() {
         fillItemsDB();
     }
 
-    public List<Item> getAll() {
-        List<Item> result = new ArrayList<>();
+    public ArrayList<Item> getAll() {
+        ArrayList<Item> result = new ArrayList<>();
         for (HashMap.Entry<String, String> item : itemsMap.entrySet()){
             result.add(new Item(item.getKey(), item.getValue()));
     }

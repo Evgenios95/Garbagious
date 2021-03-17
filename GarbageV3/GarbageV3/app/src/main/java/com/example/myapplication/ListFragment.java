@@ -11,15 +11,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ListFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+public class ListFragment extends Fragment implements Observer {
+
+    public void update(Observable o, Object data) {
+        localDB = itemsDB.getAll();
+        mAdapter.notifyDataSetChanged();
+    }
 
     private static ItemsDB itemsDB;
     private RecyclerView listThings;
     private ItemAdapter mAdapter;
+    private ArrayList<Item> localDB;
+
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         itemsDB = ItemsDB.get(getActivity());
+        itemsDB.addObserver(this);
+        localDB = itemsDB.getAll();
     }
 
     @Override
@@ -34,7 +47,7 @@ public class ListFragment extends Fragment {
         return v;
     }
 
-    private class ItemHolder extends RecyclerView.ViewHolder {
+    private class ItemHolder extends RecyclerView.ViewHolder{
         private TextView mWhatTextView, mWhereTextView, mNoView;
 
         public ItemHolder(View itemView) {
@@ -52,8 +65,7 @@ public class ListFragment extends Fragment {
     }
 
     private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
-        public ItemAdapter() {
-        }
+
 
         @NonNull @Override
         public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,7 +80,7 @@ public class ListFragment extends Fragment {
         }
 
         @Override public int getItemCount() {
-            return itemsDB.size();
+            return localDB.size();
         }
     }
 
