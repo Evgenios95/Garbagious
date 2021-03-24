@@ -1,6 +1,13 @@
 package com.example.myapplication;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.myapplication.database.ItemBaseHelper;
+import com.example.myapplication.database.ItemCursorWrapper;
+import com.example.myapplication.database.ItemsDbSchema;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,82 +19,106 @@ import java.util.Map;
 import java.util.Observable;
 
 public class ItemsDB extends Observable {
-
     private static ItemsDB sItemsDB;
-    private final HashMap<String, String> itemsMap = new HashMap<>();
-    private static Context sContext;
+    private static SQLiteDatabase mDatabase;
 
+    private ItemsDB(Context context) {
+        if (getAll().size() == 0)  fillItemsDB();
+    }
 
     public static ItemsDB get(Context context) {
-        if (sItemsDB == null) {
-            sContext = context;
-            sItemsDB = new ItemsDB();
+        if (sItemsDB == null)  {
+            mDatabase= new ItemBaseHelper(context.getApplicationContext()).getWritableDatabase();
+            sItemsDB = new ItemsDB(context);
         }
         return sItemsDB;
     }
 
-    public void addItem(String what, String where) {
-        itemsMap.put(what, where);
+    public void addItem(String what, String where){
+        Item newItem= new Item(what, where);
+        ContentValues values= getContentValues(newItem);
+        mDatabase.insert(ItemsDbSchema.ItemTable.NAME, null, values);
         this.setChanged(); notifyObservers();
     }
 
-    private ItemsDB() {
-        fillItemsDB();
+    public void removeItem(String what){
+        Item newItem= new Item(what, "");
+        String selection= ItemsDbSchema.ItemTable.Cols.WHAT + " LIKE ?";
+        int changed= mDatabase.delete(ItemsDbSchema.ItemTable.NAME, selection, new String[]{newItem.getWhat()});
+        if (changed > 0) { this.setChanged(); notifyObservers();  }
+    }
+
+    public void fillItemsDB() {
+        addItem("plastic bottle", "plastic");
+        addItem("bucket", "plastic");
+        addItem("straw", "plastic");
+        addItem("plastic cap", "plastic");
+        addItem("can", "metal");
+        addItem("cooking pan", "metal");
+        addItem("window frame", "metal");
+        addItem("telephone wire", "metal");
+        addItem("penny", "metal");
+        addItem("pennies", "metal");
+        addItem("zinc", "metal");
+        addItem("tin", "metal");
+        addItem("coffee", "food");
+        addItem("vegetables", "food");
+        addItem("fruit", "food");
+        addItem("book", "paper");
+        addItem("notebook", "paper");
+        addItem("cardboard", "paper");
+        addItem("card", "paper");
+        addItem("package", "paper");
+        addItem("carton", "paper");
+        addItem("cheque", "paper");
+        addItem("pizza box", "paper");
+        addItem("post-it note", "paper");
+        addItem("pressboard", "paper");
+        addItem("box", "paper");
+        addItem("napkin", "paper");
+        addItem("banknote", "paper");
+        addItem("letter", "paper");
+        addItem("magazine", "paper");
+        addItem("window", "glass");
+        addItem("mirror", "glass");
+        addItem("pyrex", "glass");
+        addItem("ceramics", "glass");
+        addItem("glass bottle", "glass");
+        addItem("glasses", "glass");
     }
 
     public ArrayList<Item> getAll() {
-        ArrayList<Item> result = new ArrayList<>();
-        for (HashMap.Entry<String, String> item : itemsMap.entrySet()){
-            result.add(new Item(item.getKey(), item.getValue()));
-    }
-        return result;
-    }
-
-    public int size() { return itemsMap.size(); }
-
-    public String findWaste(String garbageItem){
-        String r = "";
-        for (Map.Entry <String, String> item : itemsMap.entrySet()) {
-            if (item.getKey().equalsIgnoreCase(garbageItem)) {
-                r = r + "Throw " + item.getKey()+ " in" + item.getValue() +"!";
-                return r;
-            }
+        ArrayList<Item> items= new ArrayList<Item>();
+        ItemCursorWrapper cursor= queryItems(null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            items.add(cursor.getItem());
+            cursor.moveToNext();
         }
-        return "Sorry, not found!";
+        cursor.close();
+        return items;
     }
 
-    private void fillItemsDB() {
-        try {
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(sContext.getAssets().open(
-                            "garbage.txt")));
-            String line = reader.readLine();
-            while (line != null) {
-                String[] garbageCropper = line.split(",");
-                itemsMap.put(garbageCropper[0], garbageCropper[1]);
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    // Database helper methods to convert between Items and database rows
+    private static ContentValues getContentValues(Item item) {
+        ContentValues values=  new ContentValues();
+        values.put(ItemsDbSchema.ItemTable.Cols.WHAT, item.getWhat());
+        values.put(ItemsDbSchema.ItemTable.Cols.WHERE, item.getWhere());
+        return values;
     }
+
+    static private ItemCursorWrapper queryItems(String whereClause, String[] whereArgs) {
+        Cursor cursor= mDatabase.query(
+                ItemsDbSchema.ItemTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause, whereArgs,
+                null, // groupBy
+                null, // having
+                null  // orderBy
+        );
+        return new ItemCursorWrapper(cursor);
+    }
+
+    public void close() {   mDatabase.close();   }
 }
 
-
-
-
-
-
-
-
-
-///**
-// //     * In order to have a singleton we need a pattern. A static member, which is the instance of the
-// //     * singleton class together with a static public method which will provide access to the
-// //     * singleton object and it returns the instance to the client calling class. With the singleton
-// //     * we ensure that only one instance of a class is created and allow multiple instances in the
-// //     * future without affecting it.
-// //     *
-// //     * @param context
-// //     * @return the list
-// //     */

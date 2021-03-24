@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 public class FragmentUI extends Fragment {
 
     //GUI variables
-    private Button whereItems, listItems, addNewItem;
+    private Button whereItems, listItems, addNewItem, deleteItem;
     private TextView items, whatItem, whatPlace;
     private EditText searchItems;
 
@@ -30,11 +30,10 @@ public class FragmentUI extends Fragment {
     private ItemsDB itemsDB;
 
 
-
-    public String findWaste() {
-        String items = searchItems.getText().toString().toLowerCase();
-        return itemsDB.findWaste(items);
-    }
+//    public String findWaste() {
+//        String items = searchItems.getText().toString().toLowerCase();
+//        return itemsDB.findWaste(items);
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,30 +48,30 @@ public class FragmentUI extends Fragment {
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_ui, container, false);
 
-        items = v.findViewById(R.id.items);
-        items.setText("Input garbage below: ");
-        whereItems = v.findViewById(R.id.where_button);
+//        items = v.findViewById(R.id.items);
+//        items.setText("Input garbage below: ");
+//        whereItems = v.findViewById(R.id.where_button);
+//
+//        searchItems = v.findViewById(R.id.searchItems);
 
-        searchItems = v.findViewById(R.id.searchItems);
+//        whereItems.setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                Log.v("EditText", searchItems.getText().toString());
+//                items.setText(findWaste());
+//            }
+//        });
 
-        whereItems.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                Log.v("EditText", searchItems.getText().toString());
-                items.setText(findWaste());
-            }
-        });
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-        listItems = v.findViewById(R.id.list);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            listItems = v.findViewById(R.id.list);
 
 
-        listItems.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ListActivity.class);
-                startActivity(intent);
-            }
-        });
+            listItems.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ListActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         whatItem = v.findViewById(R.id.whatItem);
@@ -92,6 +91,17 @@ public class FragmentUI extends Fragment {
                             "Please, type something in these fields.",
                             Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        deleteItem= v.findViewById(R.id.deleteItem);
+        deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!whatItem.getText().toString().trim().isEmpty()) {
+                    itemsDB.removeItem(whatItem.getText().toString());
+                    Toast.makeText(getActivity(), "Removed "+whatItem.getText(), Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(getActivity(), "Removed", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -47,7 +47,7 @@ public class ListFragment extends Fragment implements Observer {
         return v;
     }
 
-    private class ItemHolder extends RecyclerView.ViewHolder{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mWhatTextView, mWhereTextView, mNoView;
 
         public ItemHolder(View itemView) {
@@ -62,6 +62,11 @@ public class ListFragment extends Fragment implements Observer {
             mWhatTextView.setText(item.getWhat());
             mWhereTextView.setText(item.getWhere());
         }
+
+        @Override public void onClick(View v) {
+            String what= (String)((TextView)v.findViewById(R.id.item_what)).getText();
+            itemsDB.removeItem(what);
+        }
     }
 
     private class ItemAdapter extends RecyclerView.Adapter<ItemHolder> {
@@ -74,8 +79,10 @@ public class ListFragment extends Fragment implements Observer {
             return new ItemHolder(v);
         }
 
+
+        //CHECK IT LATER
         @Override public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-            Item item = itemsDB.getAll().get(position);
+            Item item = localDB.get(position);
             holder.bindTogether(item, position);
         }
 

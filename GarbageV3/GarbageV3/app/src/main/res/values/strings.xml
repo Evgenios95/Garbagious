@@ -9,4 +9,5 @@
     <string name="what_place">What place?</string>
     <string name="list_items">List items!</string>
     <string name="show_listed_items">Show listed items!</string>
+    <string name="delete_item">Delete item</string>
 </resources>
