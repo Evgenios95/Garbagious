@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/Green3"
     android:orientation="vertical"
-    tools:context=".ListActivity">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listItems"

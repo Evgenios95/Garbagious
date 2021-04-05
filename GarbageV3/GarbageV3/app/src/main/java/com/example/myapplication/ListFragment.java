@@ -55,6 +55,7 @@ public class ListFragment extends Fragment implements Observer {
             mNoView = itemView.findViewById(R.id.item_no);
             mWhatTextView = itemView.findViewById(R.id.item_what);
             mWhereTextView = itemView.findViewById(R.id.item_where);
+            itemView.setOnClickListener(this);
         }
 
         public void bindTogether(Item item, int position) {
